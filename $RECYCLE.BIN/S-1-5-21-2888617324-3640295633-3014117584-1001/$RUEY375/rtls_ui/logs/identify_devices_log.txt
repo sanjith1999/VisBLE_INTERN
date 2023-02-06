@@ -1,0 +1,126 @@
+[2023-01-30 12:16:29,837]      root -     INFO - Setting nodes : 
+[2023-01-30 12:16:29,840]      root -     INFO - RTLS Manager started
+[2023-01-30 12:16:30,000] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:30,001] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:30,001] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:30,002] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:30,063] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:67:9C:EE:B0:6F:80:08:A4
+[2023-01-30 12:16:30,063] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:32:AD:EE:B0:6F:80:08:C0
+[2023-01-30 12:16:30,075] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:30,076] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:30,077] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:67:9C:EE:B0:6F:80:08)
+[2023-01-30 12:16:30,077] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:32:AD:EE:B0:6F:80:08)
+[2023-01-30 12:16:30,078] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:30,079] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:50,581]      root -     INFO - Setting nodes : 
+[2023-01-30 12:16:50,583]      root -     INFO - RTLS Manager started
+[2023-01-30 12:16:50,636] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:50,637] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:50,637] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:50,637] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:50,698] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:67:9C:EE:B0:6F:80:08:A4
+[2023-01-30 12:16:50,698] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:32:AD:EE:B0:6F:80:08:C0
+[2023-01-30 12:16:50,699] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:50,700] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:50,700] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:67:9C:EE:B0:6F:80:08)
+[2023-01-30 12:16:50,700] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:32:AD:EE:B0:6F:80:08)
+[2023-01-30 12:16:50,701] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:50,702] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:50,745] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:50,745] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:50,807] serialnode -    DEBUG - <<< FE:0C:00:79:00:05:01:02:00:05:A8:D7:31:B0:6F:80:08:6F
+[2023-01-30 12:16:50,808] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:50,808] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=05:01:02:00:05:A8:D7:31:B0:6F:80:08)
+[2023-01-30 12:16:50,808] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:57,233]      root -     INFO - Setting nodes : 
+[2023-01-30 12:16:57,237]      root -     INFO - RTLS Manager started
+[2023-01-30 12:16:57,300] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:57,301] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:57,301] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:16:57,302] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:57,302] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:57,302] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:16:57,363] serialnode -    DEBUG - <<< FE:0C:00:79:00:05:01:02:00:05:A8:D7:31:B0:6F:80:08:6F
+[2023-01-30 12:16:57,363] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:32:AD:EE:B0:6F:80:08:C0
+[2023-01-30 12:16:57,363] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:67:9C:EE:B0:6F:80:08:A4
+[2023-01-30 12:16:57,364] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:57,365] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:57,366] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:57,367] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=05:01:02:00:05:A8:D7:31:B0:6F:80:08)
+[2023-01-30 12:16:57,367] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:32:AD:EE:B0:6F:80:08)
+[2023-01-30 12:16:57,367] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:67:9C:EE:B0:6F:80:08)
+[2023-01-30 12:16:57,368] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:57,369] serialnode -    DEBUG - <<< 
+[2023-01-30 12:16:57,371] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:18,080]      root -     INFO - Setting nodes : 
+[2023-01-30 12:18:18,084]      root -     INFO - RTLS Manager started
+[2023-01-30 12:18:18,147] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:18,148] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:18,148] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:18,148] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:18,209] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:32:AD:EE:B0:6F:80:08:C0
+[2023-01-30 12:18:18,209] serialnode -    DEBUG - <<< FE:0C:00:79:00:05:01:02:00:05:A8:D7:31:B0:6F:80:08:6F
+[2023-01-30 12:18:18,210] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:18,211] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:18,211] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:32:AD:EE:B0:6F:80:08)
+[2023-01-30 12:18:18,212] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=05:01:02:00:05:A8:D7:31:B0:6F:80:08)
+[2023-01-30 12:18:18,212] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:18,214] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:18,240] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:18,241] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:21,888]      root -     INFO - Setting nodes : 
+[2023-01-30 12:18:21,894]      root -     INFO - RTLS Manager started
+[2023-01-30 12:18:21,956] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:21,956] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:21,957] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:21,958] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:21,958] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:21,958] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:22,019] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:32:AD:EE:B0:6F:80:08:C0
+[2023-01-30 12:18:22,020] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:22,020] serialnode -    DEBUG - <<< FE:0C:00:79:00:05:01:02:00:05:A8:D7:31:B0:6F:80:08:6F
+[2023-01-30 12:18:22,020] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:32:AD:EE:B0:6F:80:08)
+[2023-01-30 12:18:22,021] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:22,022] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:22,024] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=05:01:02:00:05:A8:D7:31:B0:6F:80:08)
+[2023-01-30 12:18:22,024] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:28,256]      root -     INFO - Setting nodes : 
+[2023-01-30 12:18:28,260]      root -     INFO - RTLS Manager started
+[2023-01-30 12:18:28,325] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:28,326] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:28,326] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:28,327] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:28,327] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:28,327] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:28,387] serialnode -    DEBUG - <<< FE:0C:00:79:00:05:01:02:00:05:A8:D7:31:B0:6F:80:08:6F
+[2023-01-30 12:18:28,387] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:32:AD:EE:B0:6F:80:08:C0
+[2023-01-30 12:18:28,388] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:28,389] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:28,390] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=05:01:02:00:05:A8:D7:31:B0:6F:80:08)
+[2023-01-30 12:18:28,390] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:32:AD:EE:B0:6F:80:08)
+[2023-01-30 12:18:28,391] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:28,393] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:32,023]      root -     INFO - Setting nodes : 
+[2023-01-30 12:18:32,027]      root -     INFO - RTLS Manager started
+[2023-01-30 12:18:32,092] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:32,093] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:32,093] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 12:18:32,094] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:32,094] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:32,094] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 12:18:32,155] serialnode -    DEBUG - <<< FE:0C:00:79:00:05:01:02:00:05:A8:D7:31:B0:6F:80:08:6F
+[2023-01-30 12:18:32,155] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:32:AD:EE:B0:6F:80:08:C0
+[2023-01-30 12:18:32,156] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:32,157] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:32,157] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=05:01:02:00:05:A8:D7:31:B0:6F:80:08)
+[2023-01-30 12:18:32,158] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:32:AD:EE:B0:6F:80:08)
+[2023-01-30 12:18:32,158] serialnode -    DEBUG - <<< 
+[2023-01-30 12:18:32,160] serialnode -    DEBUG - <<< 
+[2023-01-30 14:00:57,790]      root -     INFO - Setting nodes : 
+[2023-01-30 14:00:57,792]      root -     INFO - RTLS Manager started
+[2023-01-30 14:00:57,953] serialnode -    DEBUG - >>> UNPIMessage(originator=Ap type=SyncReq, subsystem=25, command=RTLS_CMD_IDENTIFY, data=)
+[2023-01-30 14:00:57,954] serialnode -    DEBUG - >>> FE:00:00:39:00:39
+[2023-01-30 14:00:58,015] serialnode -    DEBUG - <<< FE:0C:00:79:00:94:00:02:00:05:A8:D7:31:B0:6F:80:08:FF
+[2023-01-30 14:00:58,017] serialnode -    DEBUG - <<< 
+[2023-01-30 14:00:58,017] serialnode -    DEBUG - <<< UNPIMessage(originator=Nwp type=SyncRsp, subsystem=RTLS, command=RTLS_CMD_IDENTIFY, data=94:00:02:00:05:A8:D7:31:B0:6F:80:08)
+[2023-01-30 14:00:58,018] serialnode -    DEBUG - <<< 
