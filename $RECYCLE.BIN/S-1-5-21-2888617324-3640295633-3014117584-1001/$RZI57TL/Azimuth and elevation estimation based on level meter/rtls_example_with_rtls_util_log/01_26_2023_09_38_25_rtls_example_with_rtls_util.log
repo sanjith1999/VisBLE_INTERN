@@ -1,5 +1,0 @@
-[2023-01-26 09:38:25,197]      root -     INFO - Setting nodes : 
-[2023-01-26 09:38:25,200]      root -     INFO - Message receiver started
-[2023-01-26 09:38:25,201]      root -     INFO - RTLS Manager started
-[2023-01-26 09:38:25,202] serialnode -    ERROR - could not open port 'COM3': FileNotFoundError(2, 'The system cannot find the file specified.', None, 2)
-[2023-01-26 09:38:27,714]      root -     INFO - AOA Stopped

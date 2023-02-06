@@ -1,1 +1,0 @@
-Please refer to the readme file found in `ble\examples\rtos\CC26X2R1_LAUNCHXL\ble5stack\rtls_master`
