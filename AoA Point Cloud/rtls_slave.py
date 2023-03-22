@@ -85,6 +85,8 @@ def aoa_main(devices=[{"com_port": "COM3", "baud_rate": 460800, "name": "CC26x2 
                     print(f"Connected to : {slave} with connection handle {conn_handle}")
                     if conn_handle != None:
                         all_conn_handles.append({conn_handle:slave})
+                    else:
+                        sleep_time = 1 # REDUCING THE UNWANTED TEST TIME
                 except:
                     print(f'Failed to connect to {slave}')
                     continue
@@ -103,9 +105,15 @@ def aoa_main(devices=[{"com_port": "COM3", "baud_rate": 460800, "name": "CC26x2 
                     print(f"Connected to : {slave} with connection handle {conn_handle}")
                     if conn_handle != None:
                         all_conn_handles[conn_handle] = slave
+                    else:
+                        sleep_time = 1
                 except:
                     print(f'Failed to connect to {slave}')
                     continue
+        
+        # REDUCING THE UNWANTED TEST TIME
+        if len(all_conn_handles)==0:
+            sleep_time = 1
 
         ## Start continues connection info feature
         if cci:
@@ -229,7 +237,6 @@ def main1():
             aoa_sorted[slave] = result
         except:
             print(f"AoA Data Missing for {slave}.")
-    print(aoa_sorted)
     return aoa_sorted
 
 
@@ -263,8 +270,8 @@ def pixel_calculate(LEVELangle,AOAangle1,AOAangle2):
         # print("The Azimuth and Elevation Angles are Incorrect")
         return (1,1)
     else:
-        focal_length = 4.69  # Focal Length/mm
-        pixel_size = 1.55  # Individual Pixel size/ micron
+        focal_length = 7 # Focal Length/mm
+        pixel_size = 0.8  # Individual Pixel size/ micro meter
         f = focal_length * 1000 / pixel_size  # Pixel Focal Length
 
         camera_positon_u = f * (np.sin(azimuth1) / np.cos(azimuth1))  # Camera Co-ordinates -> Co-ordinate System Established by the Center of the Camera
