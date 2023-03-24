@@ -241,7 +241,7 @@ def main1():
 
 
 #Functions to Calculate Azimuth and Elevation
-def pixel_calculate(LEVELangle,AOAangle1,AOAangle2):
+def pixel_calculate(LEVELangle,AOAangle1,AOAangle2,beta = 1):
     #temp1 = np.pi/36
     #temp2 = np.pi/30
     #print("The Correction Value is： " + str(temp1))
@@ -270,16 +270,16 @@ def pixel_calculate(LEVELangle,AOAangle1,AOAangle2):
         # print("The Azimuth and Elevation Angles are Incorrect")
         return (1,1)
     else:
-        focal_length = 7 # Focal Length/mm
-        pixel_size = 0.8  # Individual Pixel size/ micro meter
-        f = focal_length * 1000 / pixel_size  # Pixel Focal Length
+        focal_length = 6.7 # Focal Length/mm
+        pixel_size = 1/0.8  # Individual Pixel size/ micro meter
+        f = beta * focal_length * 1000 / pixel_size  # Pixel Focal Length
 
         camera_positon_u = f * (np.sin(azimuth1) / np.cos(azimuth1))  # Camera Co-ordinates -> Co-ordinate System Established by the Center of the Camera
         camera_position_v = f * (np.cos(elvation1) / (np.cos(azimuth1) * np.sin(elvation1)))
 
 
         # Co-ordinate System Conversion: Camera co-ordinate -> GUI Co-ordinate
-        u = (2016 - camera_positon_u)
-        v = (1512 - camera_position_v)
+        u = (2000 - camera_positon_u)
+        v = (1500 - camera_position_v)
 
         return (u, v)
