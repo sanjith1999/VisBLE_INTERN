@@ -287,17 +287,20 @@ def pixel_calculate(LEVELangle,AOAangle1,AOAangle2):
         return (u, v)
     
 
+def operations_on_data(aoa_data,aoa_bias = 0):
+    for slave in aoa_data:
+        aoa_data[slave] = [i-aoa_bias for i in aoa_data[slave]]
+    return aoa_data
 
-
-def post_calculation(CASE, level1, level2):
+def post_calculation(CASE, level1, level2,aoa_bias):
 
     #  AoA BEFORE
     with open(f'./data/aoa_results/{CASE}_{level1}.json', 'r') as f:
-        aoabefore = json.load(f)
+        aoabefore = operations_on_data(json.load(f),aoa_bias)
     
     # AoA
-    with open(f'./aoa_results/{CASE}_{level2}.json','r') as f:
-        aoa = json.load(f)
+    with open(f'./data/aoa_results/{CASE}_{level2}.json','r') as f:
+        aoa = operations_on_data(json.load(f),aoa_bias)
 
     lev = [level1, level2]
     
@@ -310,7 +313,7 @@ def post_calculation(CASE, level1, level2):
     set_aoabefore = set(aoabefore)
 
     for slave in set_aoa.intersection(set_aoabefore):
-        f = open(f"./pixels/{slave.replace(':','_')}.csv",'w',newline="")
+        f = open(f"./results/pixels/{slave.replace(':','_')}.csv",'w',newline="")
         writer = csv.writer(f)
         
         for i in range(2,len(aoabefore[slave])-2):
@@ -329,7 +332,7 @@ def post_calculation(CASE, level1, level2):
 
 def visualize_aoa_spread(CASE, level, num_bins = 40):
 
-    with open(f'./aoa_results/{CASE}_{level}.json', 'r') as f:
+    with open(f'./data/aoa_results/{CASE}_{level}.json', 'r') as f:
         aoa_data = json.load(f)
 
     # Create a figure and axis object
@@ -371,9 +374,9 @@ def visualize_aoa_spread(CASE, level, num_bins = 40):
         return "SUCESS"
     
 def visualize_aoa_turn_spread(CASE, level1, level2, vis_bias=0,nbins=50):
-    with open(f'./aoa_results/{CASE}_{level1}.json', 'r') as f:
+    with open(f'./data/aoa_results/{CASE}_{level1}.json', 'r') as f:
         aoa_data1 = json.load(f)
-    with open(f'./aoa_results/{CASE}_{level2}.json', 'r') as f:
+    with open(f'./data/aoa_results/{CASE}_{level2}.json', 'r') as f:
         aoa_data2 = json.load(f)
 
 

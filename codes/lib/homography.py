@@ -29,7 +29,7 @@ def points_extractor(image1,image2,verbose=False):
     good = []
 
     for m,n in matches:
-        if m.distance < .7*n.distance:
+        if m.distance < .5*n.distance:
             good.append([m])
 
     matching_points = np.float32([[keypoints_1[mat[0].queryIdx].pt, keypoints_2[mat[0].trainIdx].pt]  for mat in good ])
