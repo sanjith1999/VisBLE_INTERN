@@ -46,9 +46,9 @@ def aoa_main():
     # PARAMETERS
     devices = [{"com_port": "COM3", "baud_rate": 460800, "name": "CC26x2 Master"}]
     slave_bd_addr_list = []
-    scan_time_sec = 2
+    scan_time_sec = 5
     connect_interval_mSec = 180
-    sleep_time = 3
+    sleep_time = 10
     cci = False
     aoa = True
     time_out_sec = 10
