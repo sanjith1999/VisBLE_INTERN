@@ -6,10 +6,12 @@ import threading
 import datetime
 import numpy as np
 from pyod.models.knn import KNN
+from pyod.models.lof import LOF
 import csv
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
 import pandas as pd
+from scipy.interpolate import CubicSpline
 
 from rtls_util import RtlsUtil, RtlsUtilLoggingLevel, RtlsUtilException, RtlsUtilTimeoutException, \
     RtlsUtilNodesNotIdentifiedException, RtlsUtilScanNoResultsException
@@ -227,37 +229,56 @@ def aoa_main():
     return aoa_data
 
 
+# REMOVAL OF ANOMALIES
+def remove_anomalies(data, model='KNN'):
+    y = np.array(data)
+
+    if model == 'KNN':
+        clf = KNN()
+    elif model == 'LOF':
+        clf = LOF()
+    else:
+        print("NO OTHER SUPPORT --> CHOOSING KNN BY DEFAULT")
+        clf = KNN()
+    try:
+        clf.fit(np.array(y).reshape(-1, 1))
+    except:
+        print(f"Angular Data Missing.")
+        return np.array([])
+
+    y_train_pre = clf.labels_
+    filtered = y[y_train_pre == 0]
+    return filtered
+
+
 # Function to Sort Data Using K-Nearest Neighbour Algorithm
-def sort_data(aoa_data, aoa_bias):
+def sort_data(aoa_data, aoa_bias=None):
     # PARAMETER DEFINITION
+    num_bins = 100++-+
+    
+    if aoa_bias is None:
+        aoa_bias = 0
     scale_factor = 0.5
+    threshold = 10
 
     for slave in aoa_data:
-        try:
-            # GETTING RID OF OUTLIER DATA
-            y = aoa_data[slave]
-            result = []
-            # Train a kNN detector
-            clf_name = 'kNN'
-            clf = KNN()  # Initialize Detector clf
-            clf.fit(np.array(y).reshape(-1, 1))  # Use X_train to train the detector clf
+        # GETTING RID OF OUTLIER DATA
+        result = remove_anomalies(aoa_data[slave], model='LOF') + aoa_bias
 
-            # Returns the Classification Labels on the Training Data(0: Normal Value, 1: Outlier)
-            y_train_pre = clf.labels_
-            # y_train_scores = clf.decision_scores_
-            # Return the abnormal Value on the Training Data(The larger the Score, the More Abnormal)
-            for i, k in enumerate(y):
-                if y_train_pre[i] == 0:
-                    result.append(k + aoa_bias)
+        # RESHAPING THE DISTRIBUTION
+        hist, bin_edges = np.histogram(result, bins=num_bins)
+        cs = CubicSpline(bin_edges[:-1], hist, bc_type='natural')
+        aoa_spread = np.linspace(bin_edges[0], bin_edges[-1], num_bins)
+        counts = cs(aoa_spread).astype(int)
 
-            Percentile = np.percentile(result, [50], axis=0)
-            result = np.array(result)
-            # MODE = np.mode(result)
-            filtered_result = (result - Percentile) * (1-scale_factor) + Percentile
-            aoa_data[slave] = filtered_result
+        # Percentile = np.percentile(result, [50], axis=0)
+        # result = gaussian_filter(result, sigma=2)
+        # MODE = np.mode(result)
+        # filtered_result = (result - Percentile) * (1 - scale_factor) + Percentile
+        # filtered_result = result[abs(result - Percentile) < threshold]
 
-        except:
-            print(f"AoA Data Missing for {slave}.")
+        aoa_data[slave] = np.repeat(aoa_spread, counts)
+
     return aoa_data
 
 
@@ -297,11 +318,11 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
 
 def post_calculation(CASE, level1, level2, aoa_bias=0):
     #  AoA BEFORE
-    with open(f'./data/aoa_results/{CASE}_{level1}.json', 'r') as f:
+    with open(f'./data/aoa_data/{CASE}_{level1}.json', 'r') as f:
         aoa_before = sort_data(json.load(f), aoa_bias)
 
     # AoA
-    with open(f'./data/aoa_results/{CASE}_{level2}.json', 'r') as f:
+    with open(f'./data/aoa_data/{CASE}_{level2}.json', 'r') as f:
         aoa = sort_data(json.load(f), aoa_bias)
 
     lev = [level1, level2]
@@ -333,10 +354,9 @@ def post_calculation(CASE, level1, level2, aoa_bias=0):
 
 
 def visualize_aoa_spread(CASE, level, num_bins=40):
-    with open(f'./data/aoa_results/{CASE}_{level}.json', 'r') as f:
-        aoa_data = json.load(f)
+    with open(f'./data/aoa_data/{CASE}_{level}.json', 'r') as f:
+        aoa_data = sort_data(json.load(f))
 
-    aoa_data = sort_data(aoa_data)
     # Create a figure and axis object
     fig, ax = plt.subplots()
 
@@ -353,7 +373,7 @@ def visualize_aoa_spread(CASE, level, num_bins=40):
 
     # Add a legend to the plot
     ax.legend()
-
+    ax.grid()
     # Show the plot
     plt.show()
 
@@ -363,10 +383,11 @@ def visualize_aoa_spread(CASE, level, num_bins=40):
 
         # Iterate over each slave and plot a histogram of its angle of arrival data
         for i, slave in enumerate(aoa_data.keys()):
-            axs[i].hist(aoa_data[slave], bins=num_bins, color='lightblue')  # adjust bins as needed
+            axs[i].hist(aoa_data[slave], bins=num_bins, alpha=0.5)  # adjust bins as needed
             axs[i].set_title(slave)
             axs[i].set_xlabel("Angle of Arrival")
             axs[i].set_ylabel("Frequency")
+            axs[i].grid()
 
         # Adjust the spacing between subplots and display the figure
         plt.tight_layout()
@@ -377,9 +398,9 @@ def visualize_aoa_spread(CASE, level, num_bins=40):
 
 
 def visualize_aoa_turn_spread(CASE, level1, level2, vis_bias=0, num_bins=50):
-    with open(f'./data/aoa_results/{CASE}_{level1}.json', 'r') as f:
+    with open(f'./data/aoa_data/{CASE}_{level1}.json', 'r') as f:
         aoa_data1 = json.load(f)
-    with open(f'./data/aoa_results/{CASE}_{level2}.json', 'r') as f:
+    with open(f'./data/aoa_data/{CASE}_{level2}.json', 'r') as f:
         aoa_data2 = json.load(f)
 
     # Set up the figure with subplots
