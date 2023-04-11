@@ -9,7 +9,6 @@ from pyod.models.knn import KNN
 from pyod.models.lof import LOF
 import csv
 import matplotlib.pyplot as plt
-from scipy.ndimage import gaussian_filter
 import pandas as pd
 from scipy.interpolate import CubicSpline
 
@@ -254,31 +253,33 @@ def remove_anomalies(data, model='KNN'):
 # Function to Sort Data Using K-Nearest Neighbour Algorithm
 def sort_data(aoa_data, aoa_bias=None):
     # PARAMETER DEFINITION
-    num_bins = 100++-+
-    
+    delta = .5
     if aoa_bias is None:
         aoa_bias = 0
-    scale_factor = 0.5
-    threshold = 10
+    scale_factor = 0.3
+    threshold = 1.5
 
     for slave in aoa_data:
         # GETTING RID OF OUTLIER DATA
         result = remove_anomalies(aoa_data[slave], model='LOF') + aoa_bias
+        # RESHAPING THE DISTRIBUTION: CUBIC SPLINE INTERPOLATION
+        unique_vals, counts = np.unique(result, return_counts=True)
+        cs = CubicSpline(unique_vals, counts, bc_type='natural')
+        aoa_spread = np.linspace(unique_vals[0], unique_vals[-1], int((unique_vals[-1] - unique_vals[0]) / delta))
+        spread_counts = cs(aoa_spread).astype(int)
 
-        # RESHAPING THE DISTRIBUTION
-        hist, bin_edges = np.histogram(result, bins=num_bins)
-        cs = CubicSpline(bin_edges[:-1], hist, bc_type='natural')
-        aoa_spread = np.linspace(bin_edges[0], bin_edges[-1], num_bins)
-        counts = cs(aoa_spread).astype(int)
+        # FINDING IMPORTANT PARAMETERS
+        reshaped_result = np.repeat(aoa_spread, spread_counts)
+        MEDIAN = np.percentile(reshaped_result, [50], axis=0)
+        MODE = aoa_spread[np.argmax(spread_counts)]
+        MEAN = np.mean(reshaped_result)
 
-        # Percentile = np.percentile(result, [50], axis=0)
-        # result = gaussian_filter(result, sigma=2)
-        # MODE = np.mode(result)
-        # filtered_result = (result - Percentile) * (1 - scale_factor) + Percentile
-        # filtered_result = result[abs(result - Percentile) < threshold]
+        # ADJUSTING DATA BASED ON ONE OF THE PARAMETER
+        PARAM = MEAN
+        filtered_vals = (aoa_spread - PARAM) * (1 - scale_factor) + PARAM
+        indices = abs(filtered_vals - PARAM) < threshold
 
-        aoa_data[slave] = np.repeat(aoa_spread, counts)
-
+        aoa_data[slave] = [filtered_vals[indices], spread_counts[indices]]
     return aoa_data
 
 
@@ -325,14 +326,7 @@ def post_calculation(CASE, level1, level2, aoa_bias=0):
     with open(f'./data/aoa_data/{CASE}_{level2}.json', 'r') as f:
         aoa = sort_data(json.load(f), aoa_bias)
 
-    lev = [level1, level2]
-
-    print(
-        "Before Turning：" + str(aoa_before) + '\n' + "After Turning： " + str(aoa) + '\n' + "Rotation Angle： " + str(lev))
-    # aoa_image()
-    u = []
-    v = []
-
+    print(f"Rotation Angle: {level1} --> {level2}")
     set_aoa = set(aoa)
     set_aoa_before = set(aoa_before)
 
@@ -340,20 +334,22 @@ def post_calculation(CASE, level1, level2, aoa_bias=0):
         f = open(f"./results/pixels/{slave.replace(':', '_')}.csv", 'w', newline="")
         writer = csv.writer(f)
 
-        for i in range(2, len(aoa_before[slave]) - 2):
-            for j in range(2, len(aoa[slave]) - 2):
-                (temp1, temp2) = pixel_calculate(lev[-2] - lev[-1], aoa_before[slave][i], aoa[slave][j])
+        data_before = aoa_before[slave]
+        data_after = aoa[slave]
+        print(f"Slave :{slave} \n AoA Before:{data_before[0]} \n AoA After:{data_after[0]} \n")
 
+        for i in range(len(data_before[0])):
+            for j in range(len(data_after[0])):
+                (temp1, temp2) = pixel_calculate(level2 - level1, data_before[0][i], data_after[0][j])
+                count = data_before[1][i]*data_after[1][j]
                 if temp1 != 1:
-                    u.append(temp1)
-                    v.append(temp2)
-                    tux = (temp1, temp2)
+                    tux = (temp1, temp2,count)
                     writer.writerow(tux)
 
         f.close()
 
 
-def visualize_aoa_spread(CASE, level, num_bins=40):
+def visualize_aoa_spread(CASE, level):
     with open(f'./data/aoa_data/{CASE}_{level}.json', 'r') as f:
         aoa_data = sort_data(json.load(f))
 
@@ -369,7 +365,7 @@ def visualize_aoa_spread(CASE, level, num_bins=40):
 
     # Loop over each slave and plot its angle of arrival data as a histogram
     for slave, data in aoa_data.items():
-        ax.hist(data, bins=num_bins, alpha=0.5, label=slave)
+        ax.hist(data[0], bins=len(data[0]), weights=data[1], alpha=0.5, label=slave)
 
     # Add a legend to the plot
     ax.legend()
@@ -383,7 +379,8 @@ def visualize_aoa_spread(CASE, level, num_bins=40):
 
         # Iterate over each slave and plot a histogram of its angle of arrival data
         for i, slave in enumerate(aoa_data.keys()):
-            axs[i].hist(aoa_data[slave], bins=num_bins, alpha=0.5)  # adjust bins as needed
+            data = aoa_data[slave]
+            axs[i].hist(data[0], bins=len(data[0]), weights=data[1], alpha=0.5, label=slave)  # adjust bins as needed
             axs[i].set_title(slave)
             axs[i].set_xlabel("Angle of Arrival")
             axs[i].set_ylabel("Frequency")
@@ -397,11 +394,11 @@ def visualize_aoa_spread(CASE, level, num_bins=40):
         return "SUCCESS"
 
 
-def visualize_aoa_turn_spread(CASE, level1, level2, vis_bias=0, num_bins=50):
+def visualize_aoa_turn_spread(CASE, level1, level2, vis_bias=0):
     with open(f'./data/aoa_data/{CASE}_{level1}.json', 'r') as f:
-        aoa_data1 = json.load(f)
+        aoa_data1 = sort_data(json.load(f))
     with open(f'./data/aoa_data/{CASE}_{level2}.json', 'r') as f:
-        aoa_data2 = json.load(f)
+        aoa_data2 = sort_data(json.load(f))
 
     # Set up the figure with subplots
     fig, axs = plt.subplots(nrows=1, ncols=len(aoa_data1.keys()), figsize=(10, 5))
@@ -409,18 +406,21 @@ def visualize_aoa_turn_spread(CASE, level1, level2, vis_bias=0, num_bins=50):
     # Iterate over each slave and plot a histogram of its angle of arrival data
     for i, slave in enumerate(aoa_data1.keys()):
         if len(aoa_data1.keys()) == 1:
-            axs.hist(np.array(aoa_data1[slave]) - vis_bias, bins=num_bins, color='lightblue',
-                     label=f'CASE-I: {level1}')  # adjust bins as needed
-            axs.hist(aoa_data2[slave], bins=40, color='orange', label=f'CASE-II: {level2}')  # adjust bins as needed
+            data1 = aoa_data1[slave]
+            axs.hist(data1[0], bins=len(data1[0]), weights=data1[1], color='lightblue', label=f'CASE-I: {level1}')
+
+            data2 = aoa_data2[slave]
+            axs.hist(data2[0] - vis_bias, bins=len(data2[0]), weights=data2[1], color='orange', label=f'CASE-II: {level2}')
             axs.set_title(slave)
             axs.set_xlabel("Angle of Arrival")
             axs.set_ylabel("Frequency")
             axs.legend()
             continue
 
-        axs[i].hist(np.array(aoa_data1[slave]) - vis_bias, bins=num_bins, color='lightblue',
-                    label=f'CASE-I: {level1}')  # adjust bins as needed
-        axs[i].hist(aoa_data2[slave], bins=40, color='orange', label=f'CASE-II: {level2}')  # adjust bins as needed
+        data1 = aoa_data1[slave]
+        axs[i].hist(data1[0], bins=len(data1[0]), weights=data1[1], color='lightblue', label=f'CASE-I: {level1}')
+        data2 = aoa_data2[slave]
+        axs[i].hist(data2[0] - vis_bias, bins=len(data2[0]), weights=data2[1], color='orange', label=f'CASE-II: {level2}')
         axs[i].set_title(slave)
         axs[i].set_xlabel("Angle of Arrival")
         axs[i].set_ylabel("Frequency")
