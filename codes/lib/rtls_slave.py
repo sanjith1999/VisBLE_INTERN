@@ -253,11 +253,11 @@ def remove_anomalies(data, model='KNN'):
 # Function to Sort Data Using K-Nearest Neighbour Algorithm
 def sort_data(aoa_data, aoa_bias=None):
     # PARAMETER DEFINITION
-    delta = .5
+    delta = 0.5
     if aoa_bias is None:
         aoa_bias = 0
-    scale_factor = 0.3
-    threshold = 1.5
+    scale_factor = 0.2
+    threshold = 2
 
     for slave in aoa_data:
         # GETTING RID OF OUTLIER DATA
@@ -279,7 +279,7 @@ def sort_data(aoa_data, aoa_bias=None):
         filtered_vals = (aoa_spread - PARAM) * (1 - scale_factor) + PARAM
         indices = abs(filtered_vals - PARAM) < threshold
 
-        aoa_data[slave] = [filtered_vals[indices], spread_counts[indices]]
+        aoa_data[slave] = [filtered_vals[indices], spread_counts[indices], PARAM]
     return aoa_data
 
 
@@ -292,7 +292,7 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
     elevation_angle = np.arccos((np.cos(angle2) - np.cos(angle1) * np.cos(level_angle)) / np.sin(level_angle))
     azimuth_angle = np.arccos(np.cos(angle1) / np.sin(elevation_angle))
 
-    if AoA_angle1 > 0 and AOA_angle2 > 0:
+    if AoA_angle1 < 0 and AOA_angle2 < 0:
         azimuth_angle = -azimuth_angle
 
     bool1 = pd.isnull(np.degrees(azimuth_angle))
@@ -300,8 +300,9 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
 
     if bool1 | bool2:
         # print("The Azimuth and Elevation Angles are Incorrect")
-        return 1, 1
+        return -1, -1
     else:
+        # SCALING TOWARDS THE CENTER
         focal_length = 6.7  # Focal Length/mm
         pixel_size = 1 / 0.8  # Individual Pixel size/ micro meter
         f = focal_length * 1000 / pixel_size  # Pixel Focal Length
@@ -311,10 +312,23 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
         camera_position_v = f * (np.cos(elevation_angle) / (np.cos(azimuth_angle) * np.sin(elevation_angle)))
 
         # Co-ordinate System Conversion: Camera co-ordinate -> GUI Co-ordinate
-        u = (2000 + camera_position_u)
-        v = (1500 + camera_position_v)
+        u = (2000 - camera_position_u)
+        v = (1500 - camera_position_v)
 
         return u, v
+
+
+def clear_folder(PARENT_DIR):
+    # Use the os module to remove all files and subdirectories in the folder
+    for filename in os.listdir(PARENT_DIR):
+        file_path = os.path.join(PARENT_DIR, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                os.rmdir(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
 
 
 def post_calculation(CASE, level1, level2, aoa_bias=0):
@@ -326,27 +340,37 @@ def post_calculation(CASE, level1, level2, aoa_bias=0):
     with open(f'./data/aoa_data/{CASE}_{level2}.json', 'r') as f:
         aoa = sort_data(json.load(f), aoa_bias)
 
-    print(f"Rotation Angle: {level1} --> {level2}")
+    print(f"Rotation Angle: {level1} --> {level2}\n")
     set_aoa = set(aoa)
     set_aoa_before = set(aoa_before)
-
+    results_path = f"./results/pixels/L{level1}/"
+    if not os.path.isdir(results_path):
+        os.makedirs(results_path)
+    else:
+        clear_folder(results_path)
     for slave in set_aoa.intersection(set_aoa_before):
-        f = open(f"./results/pixels/{slave.replace(':', '_')}.csv", 'w', newline="")
+        f = open(os.path.join(results_path,f"{slave.replace(':', '_')}.csv"), 'w', newline="")
         writer = csv.writer(f)
 
         data_before = aoa_before[slave]
         data_after = aoa[slave]
-        print(f"Slave :{slave} \n AoA Before:{data_before[0]} \n AoA After:{data_after[0]} \n")
+        print(f"Slave :{slave} \n\tAoA Before:{data_before[0]} \n\tAoA After:{data_after[0]}")
 
+        # PRINTING CENTER CO-ORDINATES
+        c_x, c_y = pixel_calculate(level1-level2, data_before[2], data_after[2])
+        print(f"\tCenter: {c_x, c_y}\n")
+        writer.writerow((c_x, c_y))
         for i in range(len(data_before[0])):
             for j in range(len(data_after[0])):
-                (temp1, temp2) = pixel_calculate(level2 - level1, data_before[0][i], data_after[0][j])
-                count = data_before[1][i]*data_after[1][j]
-                if temp1 != 1:
-                    tux = (temp1, temp2,count)
+                (temp1, temp2) = pixel_calculate(level1-level2, data_before[0][i], data_after[0][j])
+                count = data_before[1][i] * data_after[1][j]
+                if temp1 != -1:
+                    tux = (temp1, temp2, count)
                     writer.writerow(tux)
 
         f.close()
+
+    return "POINTS CALCULATION SUCCESSFUL"
 
 
 def visualize_aoa_spread(CASE, level):
