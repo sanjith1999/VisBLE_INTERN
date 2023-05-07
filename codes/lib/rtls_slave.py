@@ -343,7 +343,7 @@ def post_calculation(CASE, level1, level2, aoa_bias=0):
     print(f"Rotation Angle: {level1} --> {level2}\n")
     set_aoa = set(aoa)
     set_aoa_before = set(aoa_before)
-    results_path = f"./results/pixels/L{level1}/"
+    results_path = f"./results/pixels/{CASE}_{level1}/"
     if not os.path.isdir(results_path):
         os.makedirs(results_path)
     else:
