@@ -256,7 +256,7 @@ def sort_data(aoa_data, aoa_bias=None):
     delta = 0.5
     if aoa_bias is None:
         aoa_bias = 0
-    scale_factor = 0.2
+    scale_factor = 0
     threshold = 2
 
     for slave in aoa_data:
@@ -267,6 +267,7 @@ def sort_data(aoa_data, aoa_bias=None):
         cs = CubicSpline(unique_vals, counts, bc_type='natural')
         aoa_spread = np.linspace(unique_vals[0], unique_vals[-1], int((unique_vals[-1] - unique_vals[0]) / delta))
         spread_counts = cs(aoa_spread).astype(int)
+        spread_counts[spread_counts < 0] = 0
 
         # FINDING IMPORTANT PARAMETERS
         reshaped_result = np.repeat(aoa_spread, spread_counts)
@@ -289,6 +290,12 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
     angle2 = np.radians(AOA_angle2)
     level_angle = np.radians(level_angle_deg)
 
+    if abs(angle1) < np.radians(5) and abs(angle2) < np.radians(5):
+        angle1 = angle1 * 3
+        angle2 = angle2 * 3
+    if (angle1 > 0 > angle2) or (angle1 < 0 < angle2):
+        return 2000, 1500
+
     elevation_angle = np.arccos((np.cos(angle2) - np.cos(angle1) * np.cos(level_angle)) / np.sin(level_angle))
     azimuth_angle = np.arccos(np.cos(angle1) / np.sin(elevation_angle))
 
@@ -305,8 +312,7 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
         # SCALING TOWARDS THE CENTER
         focal_length = 6.7  # Focal Length/mm
         pixel_size = 1 / 0.8  # Individual Pixel size/ micro meter
-        f = focal_length * 1000 / pixel_size  # Pixel Focal Length
-
+        f = .8 * focal_length * 1000 / pixel_size  # Pixel Focal Length
         # Camera Co-ordinates -> Co-ordinate System Established by the Center of the Camera
         camera_position_u = f * (np.sin(azimuth_angle) / np.cos(azimuth_angle))
         camera_position_v = f * (np.cos(elevation_angle) / (np.cos(azimuth_angle) * np.sin(elevation_angle)))
@@ -349,7 +355,7 @@ def post_calculation(CASE, level1, level2, aoa_bias=0):
     else:
         clear_folder(results_path)
     for slave in set_aoa.intersection(set_aoa_before):
-        f = open(os.path.join(results_path,f"{slave.replace(':', '_')}.csv"), 'w', newline="")
+        f = open(os.path.join(results_path, f"{slave.replace(':', '_')}.csv"), 'w', newline="")
         writer = csv.writer(f)
 
         data_before = aoa_before[slave]
@@ -357,12 +363,12 @@ def post_calculation(CASE, level1, level2, aoa_bias=0):
         print(f"Slave :{slave} \n\tAoA Before:{data_before[0]} \n\tAoA After:{data_after[0]}")
 
         # PRINTING CENTER CO-ORDINATES
-        c_x, c_y = pixel_calculate(level1-level2, data_before[2], data_after[2])
+        c_x, c_y = pixel_calculate(level1 - level2, data_before[2], data_after[2])
         print(f"\tCenter: {c_x, c_y}\n")
         writer.writerow((c_x, c_y))
         for i in range(len(data_before[0])):
             for j in range(len(data_after[0])):
-                (temp1, temp2) = pixel_calculate(level1-level2, data_before[0][i], data_after[0][j])
+                (temp1, temp2) = pixel_calculate(level1 - level2, data_before[0][i], data_after[0][j])
                 count = data_before[1][i] * data_after[1][j]
                 if temp1 != -1:
                     tux = (temp1, temp2, count)
