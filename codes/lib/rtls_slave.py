@@ -45,7 +45,7 @@ def results_parsing(q):
 # Main Function
 def aoa_main():
     # PARAMETERS
-    devices = [{"com_port": "COM3", "baud_rate": 460800, "name": "CC26x2 Master"}]
+    devices = [{"com_port": "COM4", "baud_rate": 460800, "name": "CC26x2 Master"}]
     slave_bd_addr_list = []
     scan_time_sec = 5
     connect_interval_mSec = 180
@@ -251,7 +251,7 @@ def remove_anomalies(data, model='KNN'):
 
 
 # Function to Sort Data Using K-Nearest Neighbour Algorithm
-def sort_data(aoa_data, aoa_bias=None):
+def sort_data(aoa_data, aoa_bias=None,TIME = -1):
     # PARAMETER DEFINITION
     delta = 0.5
     if aoa_bias is None:
@@ -260,8 +260,14 @@ def sort_data(aoa_data, aoa_bias=None):
     threshold = 2
 
     for slave in aoa_data:
+        # TIME-PERFORMANCE ANALYZIS
+        aoa_values = aoa_data[slave].copy()
+        if TIME!= -1:
+            end = int(len(aoa_values)*TIME)
+            aoa_values = aoa_values[:end]
+
         # GETTING RID OF OUTLIER DATA
-        result = remove_anomalies(aoa_data[slave], model='LOF') + aoa_bias
+        result = remove_anomalies(aoa_values, model='LOF') + aoa_bias
         # RESHAPING THE DISTRIBUTION: CUBIC SPLINE INTERPOLATION
         unique_vals, counts = np.unique(result, return_counts=True)
         cs = CubicSpline(unique_vals, counts, bc_type='natural')
@@ -337,14 +343,14 @@ def clear_folder(PARENT_DIR):
             print(f'Failed to delete {file_path}. Reason: {e}')
 
 
-def post_calculation(CASE, level1, level2, aoa_bias=0):
+def post_calculation(CASE, level1, level2, aoa_bias=0,TIME = -1):
     #  AoA BEFORE
     with open(f'./data/aoa_data/{CASE}_{level1}.json', 'r') as f:
-        aoa_before = sort_data(json.load(f), aoa_bias)
+        aoa_before = sort_data(json.load(f), aoa_bias,TIME=TIME)
 
     # AoA
     with open(f'./data/aoa_data/{CASE}_{level2}.json', 'r') as f:
-        aoa = sort_data(json.load(f), aoa_bias)
+        aoa = sort_data(json.load(f), aoa_bias,TIME=TIME)
 
     print(f"Rotation Angle: {level1} --> {level2}\n")
     set_aoa = set(aoa)
