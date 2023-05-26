@@ -11,6 +11,7 @@ import csv
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.interpolate import CubicSpline
+import time
 
 from rtls_util import RtlsUtil, RtlsUtilLoggingLevel, RtlsUtilException, RtlsUtilTimeoutException, \
     RtlsUtilNodesNotIdentifiedException, RtlsUtilScanNoResultsException
@@ -257,7 +258,7 @@ def sort_data(aoa_data, aoa_bias=None,TIME = -1):
     if aoa_bias is None:
         aoa_bias = 0
     scale_factor = 0
-    threshold = 2
+    threshold = 1.5
 
     for slave in aoa_data:
         # TIME-PERFORMANCE ANALYZIS
@@ -300,7 +301,7 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
         angle1 = angle1 * 3
         angle2 = angle2 * 3
     if (angle1 > 0 > angle2) or (angle1 < 0 < angle2):
-        return 2000, 1500
+        return 2000, 900
 
     elevation_angle = np.arccos((np.cos(angle2) - np.cos(angle1) * np.cos(level_angle)) / np.sin(level_angle))
     azimuth_angle = np.arccos(np.cos(angle1) / np.sin(elevation_angle))
@@ -325,7 +326,7 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
 
         # Co-ordinate System Conversion: Camera co-ordinate -> GUI Co-ordinate
         u = (2000 - camera_position_u)
-        v = (1500 - camera_position_v)
+        v = (900 - camera_position_v)
 
         return u, v
 
@@ -344,6 +345,7 @@ def clear_folder(PARENT_DIR):
 
 
 def post_calculation(CASE, level1, level2, aoa_bias=0,TIME = -1):
+    start_time = time.time()
     #  AoA BEFORE
     with open(f'./data/aoa_data/{CASE}_{level1}.json', 'r') as f:
         aoa_before = sort_data(json.load(f), aoa_bias,TIME=TIME)
@@ -370,7 +372,7 @@ def post_calculation(CASE, level1, level2, aoa_bias=0,TIME = -1):
 
         # PRINTING CENTER CO-ORDINATES
         c_x, c_y = pixel_calculate(level1 - level2, data_before[2], data_after[2])
-        print(f"\tCenter: {c_x, c_y}\n")
+        print(f"\tCenter: {c_x, c_y}")
         writer.writerow((c_x, c_y))
         for i in range(len(data_before[0])):
             for j in range(len(data_after[0])):
@@ -381,7 +383,8 @@ def post_calculation(CASE, level1, level2, aoa_bias=0,TIME = -1):
                     writer.writerow(tux)
 
         f.close()
-
+    elapsed_time = time.time() - start_time
+    print(f"Total Calculation time Point Cloud: {elapsed_time}\n\n")
     return "POINTS CALCULATION SUCCESSFUL"
 
 
