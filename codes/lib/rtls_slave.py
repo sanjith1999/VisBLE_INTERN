@@ -297,7 +297,7 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
     angle2 = np.radians(AOA_angle2)
     level_angle = np.radians(level_angle_deg)
 
-    if abs(angle1) < np.radians(5) and abs(angle2) < np.radians(5):
+    if abs(angle1) < np.radians(3) and abs(angle2) < np.radians(3):
         angle1 = angle1 * 3
         angle2 = angle2 * 3
     if (angle1 > 0 > angle2) or (angle1 < 0 < angle2):
@@ -317,9 +317,9 @@ def pixel_calculate(level_angle_deg, AoA_angle1, AOA_angle2):
         return -1, -1
     else:
         # SCALING TOWARDS THE CENTER
-        focal_length = 6.7  # Focal Length/mm
-        pixel_size = 1 / 0.8  # Individual Pixel size/ micro meter
-        f = .8 * focal_length * 1000 / pixel_size  # Pixel Focal Length
+        focal_length = 7  # Focal Length/mm
+        pixel_size = 2.4  # Individual Pixel size/ micro meter
+        f = focal_length * 1000 / pixel_size  # Pixel Focal Length
         # Camera Co-ordinates -> Co-ordinate System Established by the Center of the Camera
         camera_position_u = f * (np.sin(azimuth_angle) / np.cos(azimuth_angle))
         camera_position_v = f * (np.cos(elevation_angle) / (np.cos(azimuth_angle) * np.sin(elevation_angle)))
