@@ -64,10 +64,14 @@ You can find the implementation of the above idea [here](./codes/mask_visualize.
 1. Android device is rotated in a constrained Environment (Tripod) <br>
 <img src="./images/tripod.png" alt="Tripod" width="500"/>
 2. Android device is rotated with the help of User Interface<br>
-<img src="./images/ui.png" alt="User Interface" width="500"/><br>
+<img src="./images/ui.png" alt="User Interface" width="500"/>
+
 ***Comparision***<br>
 <img src="./images/tripod_ui.png" alt="Tripod Vs UI" width="300"/><br>
-3. ***Effect of Data Acquistion Time on Performance***
-<img src="./images/a_time.png" alt="Acquisition Time on Performance" width="800"/><br>
-4. ***Effect of Distance on Performance***
+
+
+***Effect of Data Acquistion Time on Performance***
+<img src="./images/a_time.png" alt="Acquisition Time on Performance" width="800"/>
+
+***Effect of Distance on Performance***
 <img src="./images/distance.png" alt="Distance on Performance" width="800"/>
