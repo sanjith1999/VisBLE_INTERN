@@ -16,7 +16,7 @@ where $\Delta\rho$ represents the angle at which the user rotates the device aro
 
 Based on this observation, the relation is as follows:
 
-$$\left[\begin{matrix}x^\prime\\y^\prime\\z^\prime\\\end{matrix}\right] = \ \left[\begin{matrix}cos{\Delta\rho}&0&sin{\Delta\rho}\\0&1&0\\-sin{\Delta\rho}&0&cos{\Delta\rho}\\ \end{matrix}\right] \left[\begin{matrix}x\\y\\z\\\end{matrix}\right]$$
+<img src="./images/equation.png" alt="Tripod Vs UI" width="300"/>
 
 From the equations we can derive elevation and azimuth angles as follows,
 
