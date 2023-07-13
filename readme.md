@@ -15,10 +15,14 @@ $$z^\prime=OM^\prime cos{(\Delta\rho+\alpha)\qquad x^\prime=OM^\prime sin{(\Delt
 where $\Delta\rho$ represents the angle at which the user rotates the device around Y-axis and $\alpha$ represents the angle between $M$ and Z-axis.  Also, $OM = OM^\prime$ and Y-axis co-ordinate remains unchanged, since the rotation is around the Y-axis. $$y=y^\prime$$ 
 
 Based on this observation, the relation is as follows:
+
 $$\left[\begin{matrix}x^\prime\\y^\prime\\z^\prime\\\end{matrix}\right]=\ \left[\begin{matrix}cos{\Delta\rho}&0&sin{\Delta\rho}\\0&1&0\\-sin{\Delta\rho}&0&cos{\Delta\rho}\\ \end{matrix}\right]\left[\begin{matrix}x\\y\\z\\\end{matrix}\right]$$
+
 From the equations we can derive elevation and azimuth angles as follows,
+
 $$\theta = arccos{\frac{cos{(\Theta^\prime)}-cos{(\Delta\rho)}cos{(\Theta)}}{sin{(\Delta\rho)}}}$$
-  $$\phi = arccos{\frac{cos{(\Theta)}}{sin{(\theta)}}}$$
+
+$$\phi = arccos{\frac{cos{(\Theta)}}{sin{(\theta)}}}$$
 Once the elevation and azimuth angle is known we can derive the co-ordinates of device in camera co-ordinate system using linear model.
 $$\left(u,v\right)=\left(f\frac{sin\phi}{cos\phi},f\frac{cos\theta}{cos\phi s i n\theta}\right)\qquad\text{;where f - focal length of camera in android device}$$
 
